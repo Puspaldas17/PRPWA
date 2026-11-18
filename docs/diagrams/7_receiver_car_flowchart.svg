@@ -1,0 +1,91 @@
+<svg viewBox="0 0 920 650" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b" />
+    </marker>
+    <marker id="arr2-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#ef4444" />
+    </marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#0b1120" rx="14" />
+  <rect x="6" y="6" width="908" height="638" fill="none" stroke="#1e293b" stroke-width="2" rx="10" />
+
+  <text x="460" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#22c55e">Receiver (Car) Control Loop &amp; Safety Flowchart</text>
+  <text x="460" y="56" text-anchor="middle" font-size="12" fill="#94a3b8">ESP32 DevKit V1 #2 — PWM Slew, Obstacle Avoidance &amp; SoftAP Server</text>
+
+  <!-- Setup -->
+  <rect x="360" y="74" width="200" height="36" rx="18" fill="#14532d" stroke="#22c55e" stroke-width="2" />
+  <text x="460" y="96" text-anchor="middle" font-size="12" font-weight="bold" fill="#ffffff">Setup: GPIO, LEDC PWM, SoftAP</text>
+  <line x1="460" y1="110" x2="460" y2="135" stroke="#64748b" stroke-width="2" marker-end="url(#arr2)" />
+
+  <!-- Ultrasonic 60ms Tick -->
+  <rect x="330" y="135" width="260" height="44" rx="8" fill="#1e293b" stroke="#f97316" stroke-width="1.5" />
+  <text x="460" y="154" text-anchor="middle" font-size="11" font-weight="bold" fill="#fb923c">HC-SR04 Measure (every 60 ms)</text>
+  <text x="460" y="169" text-anchor="middle" font-size="10" fill="#cbd5e1">Filtered Dist = 0.6*old + 0.4*new</text>
+  <line x1="460" y1="179" x2="460" y2="204" stroke="#64748b" stroke-width="2" marker-end="url(#arr2)" />
+
+  <!-- Obstacle Check -->
+  <polygon points="460,204 570,230 460,256 350,230" fill="#1e293b" stroke="#ef4444" stroke-width="1.5" />
+  <text x="460" y="227" text-anchor="middle" font-size="11" font-weight="bold" fill="#f87171">Obstacle Ahead?</text>
+  <text x="460" y="241" text-anchor="middle" font-size="9" fill="#cbd5e1">Distance &lt; 15 cm</text>
+
+  <!-- Obstacle Block Branch -->
+  <line x1="570" y1="230" x2="640" y2="230" stroke="#ef4444" stroke-width="2" marker-end="url(#arr2-red)" />
+  <text x="600" y="222" font-size="10" fill="#ef4444" font-weight="bold">YES</text>
+  <rect x="640" y="210" width="240" height="40" rx="8" fill="#450a0a" stroke="#ef4444" stroke-width="1.5" />
+  <text x="760" y="228" text-anchor="middle" font-size="11" font-weight="bold" fill="#fca5a5">Block FORWARD Movement</text>
+  <text x="760" y="242" text-anchor="middle" font-size="9" fill="#cbd5e1">Turn Left/Right and Reverse Still Allowed</text>
+
+  <line x1="760" y1="250" x2="760" y2="275" stroke="#64748b" stroke-width="1.5" />
+  <line x1="760" y1="275" x2="460" y2="275" stroke="#64748b" stroke-width="1.5" />
+  <line x1="460" y1="256" x2="460" y2="295" stroke="#64748b" stroke-width="2" marker-end="url(#arr2)" />
+  <text x="470" y="272" font-size="10" fill="#22c55e">NO</text>
+
+  <!-- Active Mode Processing -->
+  <rect x="40" y="295" width="840" height="120" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
+  <text x="460" y="316" text-anchor="middle" font-size="12" font-weight="bold" fill="#38bdf8">Mode Command Arbitration</text>
+
+  <!-- Mode 0 -->
+  <rect x="60" y="330" width="245" height="72" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
+  <text x="182" y="350" text-anchor="middle" font-size="11" font-weight="bold" fill="#38bdf8">GESTURE MODE</text>
+  <text x="182" y="367" text-anchor="middle" font-size="10" fill="#cbd5e1">Takes ESP-NOW direction</text>
+  <text x="182" y="382" text-anchor="middle" font-size="10" fill="#cbd5e1">Radio timeout 600ms = STOP</text>
+  <text x="182" y="395" text-anchor="middle" font-size="9" fill="#f87171">Obstacle blocks FORWARD</text>
+
+  <!-- Mode 1 -->
+  <rect x="337" y="330" width="245" height="72" rx="8" fill="#1e293b" stroke="#a855f7" stroke-width="1" />
+  <text x="460" y="350" text-anchor="middle" font-size="11" font-weight="bold" fill="#c084fc">MOBILE WEB MODE</text>
+  <text x="460" y="367" text-anchor="middle" font-size="10" fill="#cbd5e1">Takes HTTP /forward, etc.</text>
+  <text x="460" y="382" text-anchor="middle" font-size="10" fill="#cbd5e1">Heartbeat timeout 700ms = STOP</text>
+  <text x="460" y="395" text-anchor="middle" font-size="9" fill="#f87171">Obstacle blocks FORWARD</text>
+
+  <!-- Mode 2 -->
+  <rect x="615" y="330" width="245" height="72" rx="8" fill="#1e293b" stroke="#22c55e" stroke-width="1" />
+  <text x="737" y="350" text-anchor="middle" font-size="11" font-weight="bold" fill="#4ade80">FOLLOW ME MODE</text>
+  <text x="737" y="367" text-anchor="middle" font-size="10" fill="#cbd5e1">&lt; 15cm: Reverse | 15-30: Hold</text>
+  <text x="737" y="382" text-anchor="middle" font-size="10" fill="#cbd5e1">33-60cm: Forward | &gt;60: Stop</text>
+  <text x="737" y="395" text-anchor="middle" font-size="9" fill="#4ade80">Speed capped at follow limit</text>
+
+  <line x1="460" y1="415" x2="460" y2="440" stroke="#64748b" stroke-width="2" marker-end="url(#arr2)" />
+
+  <!-- Motor Slew 20ms -->
+  <rect x="180" y="440" width="560" height="50" rx="8" fill="#1e293b" stroke="#eab308" stroke-width="1.5" />
+  <text x="460" y="460" text-anchor="middle" font-size="12" font-weight="bold" fill="#fde047">Motor PWM Slew Rate Limiter (every 20 ms)</text>
+  <text x="460" y="478" text-anchor="middle" font-size="10" fill="#cbd5e1">Ramps PWM through zero on any direction change (110 counts/step). Protects H-Bridge &amp; Gears.</text>
+  <line x1="460" y1="490" x2="460" y2="518" stroke="#64748b" stroke-width="2" marker-end="url(#arr2)" />
+
+  <!-- Bottom Row: ACK + Web Server -->
+  <rect x="120" y="518" width="310" height="50" rx="8" fill="#1e293b" stroke="#06b6d4" stroke-width="1.5" />
+  <text x="275" y="538" text-anchor="middle" font-size="11" font-weight="bold" fill="#22d3ee">ESP-NOW ACK Reply (100 ms)</text>
+  <text x="275" y="555" text-anchor="middle" font-size="9" fill="#94a3b8">Unicasts AckPacket {mode, distCm, flags} back to glove</text>
+
+  <line x1="430" y1="543" x2="490" y2="543" stroke="#64748b" stroke-width="2" marker-end="url(#arr2)" />
+
+  <rect x="490" y="518" width="310" height="50" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" />
+  <text x="645" y="538" text-anchor="middle" font-size="11" font-weight="bold" fill="#60a5fa">Web Server Client Handler</text>
+  <text x="645" y="555" text-anchor="middle" font-size="9" fill="#94a3b8">server.handleClient() responds to /status and drive APIs</text>
+
+  <!-- Loop back -->
+  <path d="M 800 543 H 890 V 157 H 595" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arr2)" />
+</svg>

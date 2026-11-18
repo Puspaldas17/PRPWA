@@ -1,0 +1,94 @@
+<svg viewBox="0 0 900 640" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b" />
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#22c55e" />
+    </marker>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="100%" height="100%" fill="#0b1120" rx="14" />
+  <rect x="6" y="6" width="888" height="628" fill="none" stroke="#1e293b" stroke-width="2" rx="10" />
+
+  <!-- Title -->
+  <text x="450" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#38bdf8">Transmitter (Glove) Control Logic Flowchart</text>
+  <text x="450" y="58" text-anchor="middle" font-size="12" fill="#94a3b8">ESP32 DevKit V1 #1 — 50ms Non-Blocking Loop Schedule</text>
+
+  <!-- Start -->
+  <rect x="360" y="78" width="180" height="38" rx="19" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2" />
+  <text x="450" y="102" text-anchor="middle" font-size="12" font-weight="bold" fill="#ffffff">Power ON / Setup</text>
+  <line x1="450" y1="116" x2="450" y2="142" stroke="#64748b" stroke-width="2" marker-end="url(#arr)" />
+
+  <!-- Read MPU -->
+  <rect x="350" y="142" width="200" height="42" rx="8" fill="#1e293b" stroke="#f97316" stroke-width="1.5" />
+  <text x="450" y="161" text-anchor="middle" font-size="11" font-weight="bold" fill="#fb923c">Read MPU6050 Registers</text>
+  <text x="450" y="176" text-anchor="middle" font-size="10" fill="#cbd5e1">Ax, Ay, Az via Direct I2C @ 0x68</text>
+  <line x1="450" y1="184" x2="450" y2="208" stroke="#64748b" stroke-width="2" marker-end="url(#arr)" />
+
+  <!-- Low Pass Filter -->
+  <rect x="330" y="208" width="240" height="42" rx="8" fill="#1e293b" stroke="#8b5cf6" stroke-width="1.5" />
+  <text x="450" y="227" text-anchor="middle" font-size="11" font-weight="bold" fill="#c084fc">Exponential Filter (alpha = 0.30)</text>
+  <text x="450" y="242" text-anchor="middle" font-size="10" fill="#cbd5e1">Computes Smooth Pitch and Roll</text>
+  <line x1="450" y1="250" x2="450" y2="276" stroke="#64748b" stroke-width="2" marker-end="url(#arr)" />
+
+  <!-- Button Check -->
+  <polygon points="450,276 560,306 450,336 340,306" fill="#1e293b" stroke="#eab308" stroke-width="1.5" />
+  <text x="450" y="303" text-anchor="middle" font-size="11" font-weight="bold" fill="#fde047">Button Pressed?</text>
+  <text x="450" y="318" text-anchor="middle" font-size="9" fill="#94a3b8">GPIO4 debounced 30ms</text>
+
+  <!-- Button Pressed -> Cycle Mode -->
+  <line x1="560" y1="306" x2="630" y2="306" stroke="#22c55e" stroke-width="2" marker-end="url(#arr-green)" />
+  <text x="590" y="298" font-size="10" fill="#22c55e" font-weight="bold">YES</text>
+  <rect x="630" y="285" width="230" height="42" rx="8" fill="#14532d" stroke="#22c55e" stroke-width="1.5" />
+  <text x="745" y="304" text-anchor="middle" font-size="11" font-weight="bold" fill="#86efac">Cycle Active Mode</text>
+  <text x="745" y="318" text-anchor="middle" font-size="9" fill="#dcfce7">GESTURE to MOBILE WEB to FOLLOW ME</text>
+
+  <line x1="745" y1="327" x2="745" y2="355" stroke="#64748b" stroke-width="1.5" />
+  <line x1="745" y1="355" x2="450" y2="355" stroke="#64748b" stroke-width="1.5" />
+  <line x1="450" y1="336" x2="450" y2="375" stroke="#64748b" stroke-width="2" marker-end="url(#arr)" />
+  <text x="460" y="352" font-size="10" fill="#94a3b8">NO</text>
+
+  <!-- Mode Branch Container -->
+  <rect x="40" y="380" width="820" height="130" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
+  <text x="450" y="402" text-anchor="middle" font-size="12" font-weight="bold" fill="#38bdf8">Mode Direction Evaluation</text>
+
+  <!-- Box 1: Gesture -->
+  <rect x="60" y="415" width="240" height="80" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
+  <text x="180" y="435" text-anchor="middle" font-size="11" font-weight="bold" fill="#38bdf8">Mode 0: GESTURE</text>
+  <text x="180" y="452" text-anchor="middle" font-size="10" fill="#cbd5e1">Pitch &gt; 18 deg: FORWARD</text>
+  <text x="180" y="467" text-anchor="middle" font-size="10" fill="#cbd5e1">Pitch &lt; -18 deg: BACKWARD</text>
+  <text x="180" y="482" text-anchor="middle" font-size="10" fill="#cbd5e1">Roll &gt; 18 deg: LEFT / RIGHT</text>
+
+  <!-- Box 2: Mobile Web -->
+  <rect x="330" y="415" width="240" height="80" rx="8" fill="#1e293b" stroke="#a855f7" stroke-width="1" />
+  <text x="450" y="435" text-anchor="middle" font-size="11" font-weight="bold" fill="#c084fc">Mode 1: MOBILE WEB</text>
+  <text x="450" y="455" text-anchor="middle" font-size="10" fill="#cbd5e1">Glove sets dir = STOP</text>
+  <text x="450" y="472" text-anchor="middle" font-size="10" fill="#94a3b8">Car controlled via browser UI at</text>
+  <text x="450" y="488" text-anchor="middle" font-size="10" font-weight="bold" fill="#fde047">http://192.168.4.1</text>
+
+  <!-- Box 3: Follow Me -->
+  <rect x="600" y="415" width="240" height="80" rx="8" fill="#1e293b" stroke="#22c55e" stroke-width="1" />
+  <text x="720" y="435" text-anchor="middle" font-size="11" font-weight="bold" fill="#4ade80">Mode 2: FOLLOW ME</text>
+  <text x="720" y="455" text-anchor="middle" font-size="10" fill="#cbd5e1">Glove sets dir = STOP</text>
+  <text x="720" y="472" text-anchor="middle" font-size="10" fill="#94a3b8">Autonomous tracking on car</text>
+  <text x="720" y="488" text-anchor="middle" font-size="10" font-weight="bold" fill="#4ade80">HC-SR04 Target Tracking</text>
+
+  <line x1="450" y1="510" x2="450" y2="538" stroke="#64748b" stroke-width="2" marker-end="url(#arr)" />
+
+  <!-- Transmit Packet -->
+  <rect x="140" y="538" width="280" height="46" rx="8" fill="#1e293b" stroke="#06b6d4" stroke-width="1.5" />
+  <text x="280" y="558" text-anchor="middle" font-size="11" font-weight="bold" fill="#22d3ee">ESP-NOW Broadcast (50 ms)</text>
+  <text x="280" y="573" text-anchor="middle" font-size="9" fill="#94a3b8">Transmits ControlPacket {ver, mode, dir, pitch, roll}</text>
+
+  <line x1="420" y1="561" x2="480" y2="561" stroke="#64748b" stroke-width="2" marker-end="url(#arr)" />
+
+  <!-- OLED Refresh & Link Status -->
+  <rect x="480" y="538" width="280" height="46" rx="8" fill="#1e293b" stroke="#ec4899" stroke-width="1.5" />
+  <text x="620" y="558" text-anchor="middle" font-size="11" font-weight="bold" fill="#f472b6">Refresh OLED Display (100 ms)</text>
+  <text x="620" y="573" text-anchor="middle" font-size="9" fill="#94a3b8">ACK packet alive: ● LINK OK | Timeout: ○ NO LINK</text>
+
+  <!-- Loop back line -->
+  <path d="M 760 561 H 860 V 163 H 555" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arr)" />
+</svg>

@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "ms-vscode.cpptools",
+        "vsciot-vscode.vscode-arduino",
+        "platformio.platformio-ide",
+        "bierner.markdown-mermaid"
+    ]
+}
